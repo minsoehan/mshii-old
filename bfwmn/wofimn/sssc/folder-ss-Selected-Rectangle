@@ -1,0 +1,4 @@
+#!/bin/dash
+
+grim -g "$(slurp)" ~/Pictures/screenshots/$(date +'%Y%m%d-%H%M%S').png
+notify-send -t 3000 "Selected Rectangle Screenshot" "A screenshot of your selected rectangle has been saved to ~/Pictures/screenshots."

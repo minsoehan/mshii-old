@@ -1,0 +1,5 @@
+#!/bin/dash
+
+# grim -g "$(swaymsg -t get_tree | jq -j '.. | select(.type?) | select(.focused).rect | "\(.x),\(.y) \(.width)x\(.height)"')" ~/Pictures/screenshots/$(date +'%Y%m%d-%H%M%S').png
+# notify-send -t 3000 "Focused Window Screenshot" "A screenshot of your focused window has been saved to ~/Pictures/screenshots."
+notify-send -t 7000 " " "You are not running sway.\n"

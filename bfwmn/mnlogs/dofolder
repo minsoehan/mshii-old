@@ -1,0 +1,33 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+
+for i in $(cat "$fdir"/directopenlist); do
+    ii=$(echo "$i" | sed 's/~\///')
+    # if [ -d ~/"$ii" ]; then
+    #     echo "Yes - Folder --- "$i""
+    # else
+    #     echo "No - it is a file --- "$i""
+    # fi
+    # echo "$ii"
+    scname="$(basename "$i")"
+    if [ -d ~/"$ii" ]; then
+        echo "#!/bin/dash
+        cd "$i"
+        while true; do
+            open=$(ls -a --group-directories-first --file-type -- . | grep -v "^\.[a-zA-Z0-9]\|^\./" | wofi -d) > /dev/null 2>&1
+            if [ -d "$open" ]; then
+                cd "$open"
+            else
+                if [ ! -z "$open" ]; then
+                    xdg-open "$open" &
+                fi
+                break
+            fi
+        done" > "$fdir"/dolistsc/"$scname".sh
+        chmod +x "$fdir"/dolistsc/"$scname".sh
+    else
+        echo "#!/bin/dash\nxdg-open "$i" &" > "$fdir"/dolistsc/"$scname".sh
+        chmod +x "$fdir"/dolistsc/"$scname".sh
+    fi
+done

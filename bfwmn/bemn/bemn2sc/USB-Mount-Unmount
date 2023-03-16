@@ -1,0 +1,19 @@
+#!/bin/dash
+
+usbps=$(lsblk -r | grep part | grep -v sd[ab][1-9] | bemenu)
+ckusbps=$(lsblk -r | grep part | grep -v sd[ab][1-9] | grep "$usbps")
+
+if [ ! -z "$usbps" ] && [ ! -z "$ckusbps" ]; then
+    usbp=$(echo "$usbps" | cut -d ' ' -f 1)
+    ckm=$(echo "$usbps" | cut -d ' ' -f 7)
+    if [ -z "$ckm" ]; then
+        udisksctl mount -b /dev/"$usbp" > /dev/null 2>&1
+        notify-send -t 1800 " " "/dev/"$usbp" has been mounted\n_"
+    else
+        udisksctl unmount -b /dev/"$usbp" > /dev/null 2>&1
+        notify-send -t 1800 " " "/dev/"$usbp" has been unmounted\n_"
+    fi
+else
+    notify-send -t 900 " " "clean exit\n_"
+    exit 0
+fi

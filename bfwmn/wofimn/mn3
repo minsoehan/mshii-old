@@ -1,0 +1,21 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+bdir="$(dirname "$fdir")"
+
+cd "$bdir"/mnlogs/dolistsc
+
+sel=$(ls . | wofi -k /dev/null -d)
+if [ -f "$sel" ] && [ -x "$sel" ]; then
+    ./"$sel" &
+else
+    notify-send -t 900 " " "clean exit\n_"
+fi
+
+# sel=$(ls "$bdir"/mnlogs/dolistsc | wofi -d)
+# 
+# if [ -f "$bdir"/mnlogs/dolistsc/"$sel" ] && [ -x "$bdir"/mnlogs/dolistsc/"$sel" ]; then
+#     "$bdir"/mnlogs/dolistsc/"$sel" &
+# else
+#     notify-send -t 900 " " "exit\n_"
+# fi

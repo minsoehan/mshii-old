@@ -1,0 +1,24 @@
+#!/bin/dash
+while true; do
+
+    tfile=$(trash-list | fuzzel -d) > /dev/null 2>&1
+    cktfl=$(trash-list | grep "$tfile")
+
+    if [ ! -z "$tfile" ] && [ ! -z "$cktfl" ]; then
+        tact=$(echo "Restore\nDelete" | fuzzel -d) > /dev/null 2>&1
+        case $tact in
+            Restore)
+                foot -T "foot-float" -e trash-restore "$(echo "$tfile" | cut -d' ' -f3-)"
+                ;;
+            Delete)
+                trash-rm "$(echo "$tfile" | cut -d' ' -f3-)"
+                ;;
+            *)
+                exit 0
+                ;;
+        esac
+    else
+        notify-send -t 900 " " "clean exit\n_"
+        break
+    fi
+done

@@ -1,0 +1,12 @@
+#!/bin/dash
+notify-send -t 7000 "Default Audio Output (sink)" "$(pactl get-default-sink)"
+sel=$(pactl list short sinks | cut -f2 | fuzzel -d) > /dev/null 2>&1
+cks=$(pactl list short sinks | cut -f2 | grep "$sel")
+
+if [ ! -z "$sel" ] && [ ! -z "$cks" ]; then
+    pactl set-default-sink "$sel" > /dev/null 2>&1
+    notify-send -t 1800 "Default Audio Output (sink)" "\n$(pactl get-default-sink)\n_"
+else
+    notify-send -t 900 " " "clean exit\n_"
+    exit 0
+fi

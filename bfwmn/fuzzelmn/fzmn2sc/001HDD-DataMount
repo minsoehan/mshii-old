@@ -1,0 +1,26 @@
+#!/bin/dash
+ck=$(mount | grep sda1)
+if [ -z "$ck" ]; then
+    msel=$(echo "001HDD is NOT mounted, leave as it is\nMount 001HDD data partition" | fuzzel -d) > /dev/null 2>&1
+    if [ "$msel" = "Mount 001HDD data partition" ]; then
+        mkdir -p /home/msh/001HDD
+        mount /home/msh/001HDD
+        notify-send -t 7000 "Mounted" "/dev/sda1 is mounted to ~/001HDD"
+    else
+        notify-send -t 7000 "Leave" "/dev/sda1 is still UNMOUNTED to ~/001HDD"
+    fi
+else
+    usel=$(echo "001HDD is MOUNTED, leave as it is\nUnmount 001HDD data partition" | fuzzel -d) > /dev/null 2>&1
+    if [ "$usel" = "Unmount 001HDD data partition" ]; then
+        ckb=$(lsof /home/msh/001HDD)
+        if [ -z "$ckb" ]; then
+            umount /home/msh/001HDD
+            sleep 1s
+            notify-send -t 7000 "Unmounted" "/dev/sda1 is unmounted."
+        else
+            notify-send -t 7000 "Device is busy. It cannot be unmounted." "$ckb"
+        fi
+    else
+        notify-send -t 7000 "Leave" "/dev/sda1 is still MOUNTED to ~/001HDD"
+    fi
+fi > /dev/null 2>&1

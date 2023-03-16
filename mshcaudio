@@ -1,0 +1,26 @@
+#!/bin/dash
+
+# msh audio control script
+# recommended to copy it to /usr/local/bin
+
+case $1 in
+    mtoggle)
+        pactl set-sink-mute @DEFAULT_SINK@ toggle
+        ;;
+    volup)
+        pactl set-sink-volume @DEFAULT_SINK@ +5%
+        ;;
+    voldown)
+        pactl set-sink-volume @DEFAULT_SINK@ -5%
+        ;;
+    *)
+        notify-send " " "Do one of mtoggle, volup and voldown.\n_"
+        ;;
+esac
+
+mstate=$(pactl get-sink-mute @DEFAULT_SINK@)
+voll=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '/Volume: / {print $5,$12}')
+
+notify-send -t 3000 -h string:x-canonical-private-synchronous:mshcaudio \
+    " " \
+    "Audio $mstate | Volume: $voll\n_"

@@ -1,0 +1,21 @@
+#!/bin/dash
+
+# msh brightness control script
+# recommended to copy it to /usr/local/bin
+
+case $1 in
+    up)
+        brightnessctl -q set +5%
+        ;;
+    down)
+        brightnessctl -q set 5%-
+        ;;
+    *)
+        notify-send " " "Do one of up and down.\n_"
+esac
+
+sbl=$(brightnessctl | awk -F '[()]' '/Current brightness: / {print $2}')
+
+notify-send -t 5000 -h string:x-canonical-private-synchronous:mshcsbl \
+    " " \
+    "Screen Brightness Level - $sbl\n_"

@@ -1,0 +1,25 @@
+#!/bin/dash
+ck=$(cat /sys/class/drm/card0-HDMI-A-1/modes)
+if [ ! -z "$ck" ]; then
+    resxy=$(cat /sys/class/drm/card0-HDMI-A-1/modes | wofi -d)
+    resx=$(echo "$resxy" | cut -d'x' -f1)
+    resxx=$((resx+5))
+    side=$(echo 'LEFT\nRIGHT' | wofi -d)
+    case "$side" in
+        LEFT)
+            swaymsg output eDP-1 position $resxx 0 resolution 1920x1080
+            swaymsg output HDMI-A-1 position 0 0 resolution $resxy
+            notify-send -t 3000 "Configuring External Monitor/Screen" "HDMI-A-1 has been configured\non the $side of eDP-1."
+            ;;
+        RIGHT)
+            swaymsg output eDP-1 position 0 0 resolution 1920x1080
+            swaymsg output HDMI-A-1 position 1925 0 resolution $resxy
+            notify-send -t 3000 "Configuring External Monitor/Screen" "HDMI-A-1 has been configured\non the $side of eDP-1."
+            ;;
+        *)
+            notify-send -t 1800 " " "clean exit\n_"
+            ;;
+    esac
+else
+    notify-send -t 3000 "No External Monitor/Screen" "HDMI-A-1 is not pluged in."
+fi

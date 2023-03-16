@@ -1,0 +1,31 @@
+#!/bin/dash
+
+if ! pgrep -f ydotoold > /dev/null 2>&1; then
+    # sudo ydotoold & >> /dev/null 2>&1
+    # sudo is no longer needed after adding user "input" group
+    ydotoold & >> /dev/null 2>&1
+    notify-send -t 2000 " " "Wait 1 Seconds - Launching ydotoold\n_"
+    sleep 1
+fi
+
+fdir="$(dirname "$(readlink -f "$0")")"
+
+if [ ! $(pgrep -f slurp) ]; then
+    grim -g "$(slurp)" "$fdir"/ssmev/sswlselview.png &&
+        feh --title "mshcfloat" -B black --auto-zoom "$fdir"/ssmev/sswlselview.png &
+else
+    ck=$(cat "$fdir"/ssmev/mlbstate)
+    if [ $ck = "0" ]; then
+        # sudo ydotool click 0x40 > /dev/null 2>&1 &&
+        # sudo is no longer needed after adding user to "input" group
+        ydotool click 0x40 > /dev/null 2>&1 &&
+            echo "1" > "$fdir"/ssmev/mlbstate &&
+            "$fdir"/ssmev/mevnoti &
+    else
+        ydotool click 0x80 > /dev/null 2>&1 &&
+            echo "0" > "$fdir"/ssmev/mlbstate &&
+            kill -9 "$(cat "$fdir"/ssmev/mevnotipid)" &&
+            notify-send -t 300 -h string:x-canonical-private-synchronous:mev04 \
+            " " " ----- Mouse button has been released ----- \n_"
+    fi
+fi

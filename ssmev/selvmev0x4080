@@ -1,0 +1,21 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+
+if [ ! $(pgrep -f slurp) ]; then
+    grim -g "$(slurp)" "$fdir"/sswlselview.png &&
+        feh --title "mshcfloat" -B black --auto-zoom ""$fdir""/sswlselview.png &
+else
+    ck=$(cat "$fdir"/mlbstate)
+    if [ $ck = "0" ]; then
+        ydotool click 0x40 > /dev/null 2>&1 &&
+            echo "1" > "$fdir"/mlbstate &&
+            "$fdir"/mevnoti &
+    else
+        ydotool click 0x80 > /dev/null 2>&1 &&
+            echo "0" > "$fdir"/mlbstate &&
+            kill -9 "$(cat "$fdir"/mevnotipid)" &&
+            notify-send -t 300 -h string:x-canonical-private-synchronous:mev04 \
+            " " " ----- Mouse button has been released ----- "
+    fi
+fi

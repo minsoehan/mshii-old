@@ -1,0 +1,69 @@
+#!/bin/dash
+
+wmpl () {
+    case "$1" in
+        bui)
+            mplayer -title "mshcfloat" \
+                tv:// -tv driver=v4l2:width=450:height=350:device=/dev/video0 \
+                -fps 60 -vf screenshot & > /dev/null 2>&1
+            ;;
+        ext)
+            mplayer -title "mshcfloat" \
+                tv:// -tv driver=v4l2:width=450:height=350:device=/dev/video2 \
+                -fps 60 -vf screenshot & > /dev/null 2>&1
+            ;;
+        *)
+            notify-send -t 900 " " "clean exit\n_"
+            ;;
+    esac
+}
+
+wmpv () {
+    case "$1" in
+        bui)
+            mpv av://v4l2:/dev/video0 --profile=low-latency --untimed --autofit=35% & > /dev/null 2>&1
+            ;;
+        ext)
+            mpv av://v4l2:/dev/video2 --profile=low-latency --untimed --autofit=35% & > /dev/null 2>&1
+            ;;
+        *)
+            notify-send -t 900 " " "clean exit\n_"
+            ;;
+    esac
+}
+
+wcsel=$(echo "video0 (Built-In)\nvideo2 (External)" | wofi -d)
+
+case "$wcsel" in
+    "video0 (Built-In)")
+        wmsel=$(echo "MPV\nMPlayer" | wofi -d)
+        case "$wmsel" in
+            MPV)
+                wmpv bui
+                ;;
+            MPlayer)
+                wmpl bui
+                ;;
+            *)
+                notify-send -t 900 " " "clean exit\n_"
+                ;;
+        esac
+        ;;
+    "video2 (External)")
+        wmsel=$(echo "MPV\nMPlayer" | wofi -d)
+        case "$wmsel" in
+            MPV)
+                wmpv ext
+                ;;
+            MPlayer)
+                wmpl ext
+                ;;
+            *)
+                notify-send -t 900 " " "clean exit\n_"
+                ;;
+        esac
+        ;;
+    *)
+        notify-send -t 900 " " "clean exit\n_"
+        ;;
+esac

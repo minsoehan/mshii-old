@@ -1,0 +1,100 @@
+#!/bin/dash
+
+audiomanage () {
+    case $1 in
+        mutetoggle)
+            pactl set-sink-mute @DEFAULT_SINK@ toggle
+            ;;
+        voldown)
+            pactl set-sink-volume @DEFAULT_SINK@ -5%
+            ;;
+        volup)
+            pactl set-sink-volume @DEFAULT_SINK@ +5%
+            ;;
+        setvol)
+            pactl set-sink-volume @DEFAULT_SINK@ $2%
+            ;;
+        getinfo)
+            mstate=$(pactl get-sink-mute @DEFAULT_SINK@)
+            voll=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '/Volume: / {print $5,$12}')
+            ;;
+        *)
+            echo "Do one of mutetoggle, voldown, volup and getinfo after audiomanage."
+            ;;
+    esac
+}
+
+sblmanage () {
+    case $1 in
+        down)
+            brightnessctl set 5%-
+            ;;
+        up)
+            brightnessctl set +5%
+            ;;
+        setsbl)
+            brightnessctl set $2%
+            ;;
+        getinfo)
+            sbll=$(brightnessctl | awk -F '[()]' '/Current brightness: / {print $2}')
+            ;;
+        *)
+            echo "Do one of down, up and getinfo after sblmanage."
+            ;;
+    esac
+}
+
+# othermanage () {
+#     case $1 in
+#         bntoggle)
+#             bnst=$(cat $hdir/iwaited/batnotistate)
+#             if [ "$bnst" = "Noti-on" ]; then
+#                 echo "Noti-off" > $hdir/iwaited/batnotistate
+#             else
+#                 echo "Noti-on" > $hdir/iwaited/batnotistate
+#             fi
+#             ;;
+#         *)
+#             echo "Do one of bntoggle after othermanage."
+#             ;;
+#     esac
+# }
+
+audiomanage getinfo
+sblmanage getinfo
+
+echo "
+    0) EXIT
+    1) $mstate
+    2) Volume: $voll
+    3) Brightness: $sbll
+    "
+
+read -p "Select Number to Change: " sel
+case $sel in
+    0)
+        exit 0
+        ;;
+    1)
+        audiomanage mutetoggle
+        audiomanage getinfo
+        $0
+        ;;
+    2)
+        echo "Number of volume level in percentage."
+        read -p "Type number WITHOUT \"%\": " volln
+        audiomanage setvol $volln
+        audiomanage getinfo
+        $0
+        ;;
+    3)
+        echo "Number of screen brightness level in percentage."
+        read -p "Type number WITHOUT \"%\": " sbln
+        sblmanage setsbl $sbln
+        sblmanage getinfo
+        $0
+        ;;
+    *)
+        exit 0
+        ;;
+esac

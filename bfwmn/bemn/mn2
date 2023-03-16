@@ -1,0 +1,10 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+cd "$fdir"/bemn2sc
+sel=$(ls . | bemenu)
+if [ -f "$sel" ] && [ -x "$sel" ]; then
+    ./"$sel"
+else
+    notify-send -t 900 " " "clean exit\n_"
+fi

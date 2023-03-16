@@ -1,0 +1,26 @@
+#!/bin/dash
+
+a=1
+case $1 in
+    -r)
+        for i in ./*.$2; do
+            jhead -autorot "$i"
+            new=$(printf "%03d" "$a")
+            ffmpeg -i "$i" -vf scale=576:-2 "$new-"$3"."$2""
+            a=$((a+1))
+        done
+        ;;
+    -n)
+        for i in ./*.$2; do
+            new=$(printf "%03d" "$a")
+            ffmpeg -i "$i" -vf scale=576:-2 "$new-"$3"."$2""
+            a=$((a+1))
+        done
+        ;;
+    help)
+        echo "option -r is to auto rotate by jhead -autorot file.jpg"
+        echo "option -n is NOT to auto rotate by jhead -autorot file.jpg"
+        echo "Usage - $ imsreducer -r/n jpg nameofreducedfile"
+        echo "Usage - $ imsreducer -r/n png nameofreducedfile"
+        ;;
+esac

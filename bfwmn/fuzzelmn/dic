@@ -1,0 +1,15 @@
+#!/bin/dash
+
+# cd ~/.mshdir/scripts/mshii/fwmn/mndicsrc
+
+fdir="$(dirname "$(readlink -f "$0")")"
+bdir="$(dirname "$fdir")"
+
+cd "$bdir"/mndicsrc
+open=$(ls . | fuzzel -d) > /dev/null 2>&1
+if [ -f "$open" ]; then
+    xdg-open "$open" &
+else
+    notify-send -t 900 " " "clean exit\n_"
+    exit 0
+fi

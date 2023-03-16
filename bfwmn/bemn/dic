@@ -1,0 +1,14 @@
+#!/bin/dash
+
+# cd ~/.mshdir/scripts/mshii/fwmn/mndicsrc
+
+fdir="$(dirname "$(readlink -f "$0")")"
+bdir="$(dirname "$fdir")"
+
+cd "$bdir"/mndicsrc
+open=$(ls . | bemenu)
+if [ -f "$open" ]; then
+    xdg-open "$open" &
+else
+    notify-send -t 900 " " "clean exit\n_"
+fi

@@ -1,0 +1,15 @@
+#!/bin/dash
+
+pr=$(echo "Poweroff\nReboot" | fuzzel -d) > /dev/null 2>&1
+
+case "$pr" in
+    Poweroff)
+        systemctl poweroff
+        ;;
+    Reboot)
+        systemctl reboot
+        ;;
+    *)
+        notify-send -t 7000 " " "Fuck You, Man!\n_"
+        exit
+esac

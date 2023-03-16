@@ -1,0 +1,17 @@
+#!/bin/dash
+
+[ ! -z "$1" ] && cd "$1" > /dev/null 2>&1 || cd ~ > /dev/null 2>&1
+
+while true; do
+    open=$(ls -a --group-directories-first --file-type -- . | grep -v "^\.[a-zA-Z0-9]\|^\./" | wofi -d)
+    if [ -d "$open" ]; then
+        cd "$open"
+    else
+        if [ -f "$open" ]; then
+            xdg-open "$open" &
+        else
+            notify-send -t 900 " " "clean exit\n_"
+        fi
+        break
+    fi
+done

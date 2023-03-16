@@ -1,0 +1,4 @@
+#!/bin/dash
+
+grim ~/Pictures/screenshots/$(date +'%Y%m%d-%H%M%S').png
+notify-send -t 3000 "Whole Screen Screenshot" "A screenshot of your whole screen has been saved to ~/Pictures/screenshots."

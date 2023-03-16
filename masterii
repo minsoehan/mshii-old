@@ -1,0 +1,48 @@
+#!/bin/dash
+
+# getting dir path where this script exists
+# even it is excuted through symlink
+fdir="$(dirname "$(readlink -f "$0")")"
+
+# set "bemenu", "fuzzelmn" or "wofimn" to mndir variable name
+# mndir=fuzzelmn
+# mndir=bemn
+mndir=wofimn
+
+case $1 in
+    ""|toggle) "$fdir"/infonotitoggle.sh &;;
+    bnt|bntoggle) "$fdir"/batnotitoggle.sh $2;;
+    iloops) "$fdir"/loopswitch.sh $2;;
+    cns) "$fdir"/mshcns;;
+    audio) "$fdir"/mshcaudio $2;;
+    screenbl) "$fdir"/mshcsbl $2;;
+    menu) "$fdir"/bfwmn/$mndir/mncns $2 $3;;
+    dolmn) "$fdir"/bfwmn/mnlogs/dolmn $2;;
+    ss1) "$fdir"/bfwmn/$mndir/sssc/clipboard-ss-Selected-Rectangle;;
+    ss2) "$fdir"/bfwmn/$mndir/sssc/clipboard-ss-Whole-Screen;;
+    ss3) "$fdir"/bfwmn/$mndir/sssc/swappy-ss-Selected-Rectangle;;
+    fzl) "$fdir"/bfwmn/fzl;;
+    selview) "$fdir"/ssmev/selvmev0x4080;;
+    mlb) "$fdir"/ssmev/mev0x4080;;
+    mur) "$fdir"/mur $2 $3;;
+    imsreducer) "$fdir"/imsreducer $2 $3 $4;;
+    pass) "$fdir"/passwds;;
+    *)
+        echo "Do one of them below;"
+        echo "$ ii [ |toggle] --- to toggle infonoti"
+        echo "$ ii [bnt|bntoggle] --- to toggle battery noti"
+        echo "$ ii iloops [startloops,stoploops] --- to start loops"
+        echo "$ ii cns --- to launch mshcns"
+        echo "$ ii audio [mtoggle,volup,voldown] --- to control audio - mtoggle, volup and voldown"
+        echo "$ ii screenbl [up,down] --- to control screenbl - up and down"
+        echo "$ ii menu [dic,fm,mn1,mn2,mn3,ss] --- to open menu [fuzzel/wofi]"
+        echo "$ ii dolmn [update|gen] --- to update or gen direct open menu"
+        echo "$ ii [ss1|ss2|ss3] -- to launch screenshot of Selected, Whole and Swappy Selected"
+        echo "$ ii fzl --- to launch fuzzy finder and launcher"
+        echo "$ ii selview --- to make screenshot selected view"
+        echo "$ ii mlb --- to mouse left button toggle"
+        echo "$ ii mur [update|search <pkg>|install <pkg>|download <pkg>] --- AUR"
+        echo "$ ii imsreducer [-r|n jpg|png <name>] --- reduce image size"
+        echo "$ ii pass --- pass passwords"
+        ;;
+esac

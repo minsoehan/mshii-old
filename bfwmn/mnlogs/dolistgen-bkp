@@ -1,0 +1,17 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+
+rm "$fdir"/dolistsc/*
+
+for i in $(cat "$fdir"/directopenlist); do
+    ii=$(echo "$i" | sed 's/~\///')
+    scname="$(basename "$i")"
+    if [ -d ~/"$ii" ]; then
+        echo "#!/bin/dash\nii menu fm "$i" &" > "$fdir"/dolistsc/"$scname".sh
+        chmod +x "$fdir"/dolistsc/"$scname".sh
+    else
+        echo "#!/bin/dash\nxdg-open "$i" &" > "$fdir"/dolistsc/"$scname".sh
+        chmod +x "$fdir"/dolistsc/"$scname".sh
+    fi
+done

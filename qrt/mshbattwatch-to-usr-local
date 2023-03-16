@@ -1,0 +1,31 @@
+#!/bin/dash
+
+# msh battery watch script
+# recommended to copy to /usr/local/bin
+# 0/1 switch file is /tmp/mshbattnotionoff
+
+bnf=/tmp/mshbattnotionoff
+
+while true; do
+
+    batcap=$(cat /sys/class/power_supply/BAT0/capacity)
+    batstatus=$(cat /sys/class/power_supply/BAT0/status)
+
+    [ ! -f "$bnf" ] && echo "1" > "$bnf"
+    cbn=$(cat "$bnf")
+
+    if [ "$batstatus" = "Discharging" ]; then
+        [ $((batcap)) -lt 20 ] && systemctl poweroff
+        [ $((batcap)) -lt 25 ] && notify-send -u critical -t 12000 "BATTERY POWER" \
+            "Battery power is critically low.\n$(acpi)\nCharge it NOW."
+        [ $((cbn)) -eq 1 ] && [ $((batcap)) -lt 40 ] && notify-send -u critical -t 12000 "BATTERY POWER" \
+            "Battery power is lower than 40%.\n$(acpi)\nPlease charge the battery before shutdown soon."
+        [ $((batcap)) -gt 50 ] && sleep 90
+    else
+        [ $((cbn)) -eq 1 ] && [ $((batcap)) -gt 80 ] && notify-send -t 7000 "BATTERY CHARGING" \
+            "Battery power is now over 80%.\n$(acpi)\nIt is recommended to stop charging for battery health."
+        sleep 30
+    fi
+    sleep 30
+
+done &

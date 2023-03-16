@@ -1,0 +1,10 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+cd "$fdir"/fzmn2sc
+sel=$(ls . | fuzzel -d) > /dev/null 2>&1
+if [ -f "$sel" ] && [ -x "$sel" ]; then
+    ./"$sel"
+else
+    notify-send -t 900 " " "clean exit\n_"
+fi

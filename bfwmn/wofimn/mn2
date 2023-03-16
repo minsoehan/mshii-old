@@ -1,0 +1,17 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+cd "$fdir"/womn2sc
+sel=$(ls . | wofi -d)
+if [ -f "$sel" ] && [ -x "$sel" ]; then
+    ./"$sel"
+else
+    notify-send -t 900 " " "clean exit\n_"
+fi
+
+# sel=$(ls "$fdir"/womn2sc | wofi -d)
+# if [ -f "$fdir"/womn2sc/"$sel" ] && [ -x "$fdir"/womn2sc/"$sel" ]; then
+#     "$fdir"/womn2sc/"$sel" &
+# else
+#     notify-send -t 900 " " "exit\n_"
+# fi

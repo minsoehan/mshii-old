@@ -1,0 +1,29 @@
+#!/bin/dash
+
+sellaunch () {
+    if [ -f "$open" ]; then
+        xdg-open "$open" &
+    else
+        notify-send -t 900 " " "clean exit\n_"
+    fi
+}
+
+cd ~
+sel=$(echo "Last Accessed Files\nLast Changed Files\nLast Modified Files" | wofi -d)
+case "$sel" in
+    "Last Accessed Files")
+        open=$(find ~/* -type f -printf "%AF-%AT_%p\n" | sort -r | head -n 18 | awk -F '_' '{print $2}' | wofi -d)
+        sellaunch
+        ;;
+    "Last Changed Files")
+        open=$(find ~/* -type f -printf "%CF-%CT_%p\n" | sort -r | head -n 18 | awk -F '_' '{print $2}' | wofi -d)
+        sellaunch
+        ;;
+    "Last Modified Files")
+        open=$(find ~/* -type f -printf "%TF-%TT_%p\n" | sort -r | head -n 18 | awk -F '_' '{print $2}' | wofi -d)
+        sellaunch
+        ;;
+    *)
+        notify-send -t 900 " " "clean exit\n_"
+        ;;
+esac

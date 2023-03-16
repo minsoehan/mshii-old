@@ -1,0 +1,4 @@
+#!/bin/dash
+
+grim - | swappy -f -
+notify-send -t 3000 "Whole Screen Screenshot" "A screenshot of your whole screen has been opened and edited in swappy."

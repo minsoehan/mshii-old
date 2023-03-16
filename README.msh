@@ -1,0 +1,61 @@
+———————————————————————————————————————————————————————————————————————
+This is minsoehan's dash scripts collection mainly consist of
+"infonoti" "mshcns" "mshcaudio" "mshcsbl" and others
+———————————————————————————————————————————————————————————————————————
+cd to mshii folder then run installii as follows;
+    $ cd ~/path/mshii
+    $ ./installii
+It will creat symlink named as "ii" in $PATH to ./infonotiswitch.sh
+
+The structure is as follows;
+
+ii (symlink in $PATH)
+ |
+ |——masterii
+ |  |
+ |  |——infonotitoggle.sh——iwaited/audiomutestate,volumelevel,screenbl
+ |     |
+ |     |——infonotiloop.sh——inotifywait——iwaited/*
+ |     |——loopswitch.sh
+ |        |
+ |        |——datetimeloop.sh——iwaited/datetime
+ |        |——batstateloop.sh——iwaited/batstatus,batlevel
+ |        |——netstateloop.sh——iwaited/constate,curessid,curipaddr
+ |        
+ |——infonotiswitch.sh——batnotitoggle.sh——iwaited/bnstate
+    $ ii bnt|bntoggle (only if required)
+    $ ii bnt enable
+    $ ii bnt disable
+———————————————————————————————————————————————————————————————————————
+$ ii
+$ ii toggle
+———————————————————————————————————————————————————————————————————————
+$ ii bnt [enable|disable]
+$ ii bntoggle
+———————————————————————————————————————————————————————————————————————
+$ ii iloops [startloops|stoploops]
+———————————————————————————————————————————————————————————————————————
+$ ii cns
+———————————————————————————————————————————————————————————————————————
+$ ii audio [mtoggle|volup|voldown]
+———————————————————————————————————————————————————————————————————————
+$ ii screenbl [up|down]
+———————————————————————————————————————————————————————————————————————
+$ ii menu [dic|fm|mn1|mn2|mn3|ss]
+———————————————————————————————————————————————————————————————————————
+$ ii dolmn [update|gen]
+———————————————————————————————————————————————————————————————————————
+$ ii [ss1|ss2|ss3]
+———————————————————————————————————————————————————————————————————————
+$ ii fzl
+———————————————————————————————————————————————————————————————————————
+$ ii selview
+———————————————————————————————————————————————————————————————————————
+$ ii mlb
+———————————————————————————————————————————————————————————————————————
+$ ii mur [update|search <pkg>|install <pkg>|download <pkg>]
+———————————————————————————————————————————————————————————————————————
+$ ii imsreducer [-r|-n jpg|png <name>]
+———————————————————————————————————————————————————————————————————————
+$ ii pass
+———————————————————————————————————————————————————————————————————————

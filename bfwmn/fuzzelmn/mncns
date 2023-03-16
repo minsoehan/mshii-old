@@ -1,0 +1,27 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+
+case $1 in
+    dic)
+        "$fdir"/dic
+        ;;
+    fm)
+        "$fdir"/fm $2
+        ;;
+    mn1)
+        "$fdir"/mn1
+        ;;
+    mn2)
+        "$fdir"/mn2
+        ;;
+    mn3)
+        "$fdir"/mn3
+        ;;
+    ss)
+        "$fdir"/ss
+        ;;
+    *)
+        exit 0
+        ;;
+esac

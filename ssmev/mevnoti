@@ -1,0 +1,29 @@
+#!/bin/dash
+
+hdir="$(dirname "$0")"
+echo "$$" > "$hdir"/mevnotipid
+
+notify-send -t 300 -h string:x-canonical-private-synchronous:mev04 \
+    " " ">> Mouse button is being pressed and held <<\n_"
+sleep 12
+
+while true; do
+    notify-send -h string:x-canonical-private-synchronous:mev04 \
+        " " ">>     Press [insert] or [control+insert] to release mouse button     <<\n_"
+    sleep 0.3
+    notify-send -h string:x-canonical-private-synchronous:mev04 \
+        " " ">>>>   Press [insert] or [control+insert] to release mouse button   <<<<\n_"
+    sleep 0.3
+    notify-send -h string:x-canonical-private-synchronous:mev04 \
+        " " ">>>>>> Press [insert] or [control+insert] to release mouse button <<<<<<\n_"
+    sleep 0.3
+    notify-send -h string:x-canonical-private-synchronous:mev04 \
+        " " ">>     Press [insert] or [control+insert] to release mouse button     <<\n_"
+    sleep 0.3
+    notify-send -h string:x-canonical-private-synchronous:mev04 \
+        " " ">>>>   Press [insert] or [control+insert] to release mouse button   <<<<\n_"
+    sleep 0.3
+    notify-send -t 3000 -h string:x-canonical-private-synchronous:mev04 \
+        " " ">>>>>> Press [insert] or [control+insert] to release mouse button <<<<<<\n_"
+    sleep 3
+done

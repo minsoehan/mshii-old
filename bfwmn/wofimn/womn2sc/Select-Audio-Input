@@ -1,0 +1,11 @@
+#!/bin/dash
+notify-send -t 1800 "Default Audio Input (source)" "\n$(pactl get-default-source)\n_"
+sel=$(pactl list short sources | cut -f2 | wofi -d)
+cks=$(pactl list short sources | cut -f2 | grep "$sel")
+
+if [ ! -z "$sel" ] && [ ! -z "$cks" ]; then
+    pactl set-default-source "$sel" > /dev/null 2>&1
+    notify-send -t 1800 "Default Audio Input (source)" "\n$(pactl get-default-source)\n_"
+else
+    notify-send -t 900 " " "clean exit\n_"
+fi

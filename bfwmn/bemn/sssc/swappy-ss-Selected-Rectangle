@@ -1,0 +1,4 @@
+#!/bin/dash
+
+grim -g "$(slurp)" - | swappy -f -
+notify-send -t 3000 "Selected Rectangle Screenshot" "A screenshot of your selected rectangle has been opened and edited in swappy."

@@ -1,0 +1,9 @@
+#!/bin/dash
+
+passfiles=$(find ~/.password-store -name "*.gpg" | sed 's/\/home\/msh\/\.password-store\///;s/\.gpg//')
+
+# selpassfile=$(echo "$passfiles" | bemenu --fn "monospace 20" -l 12 -p "passwords: ")
+# selpassfile=$(echo "$passfiles" | fuzzel -d)
+
+selpassfile=$(echo "$passfiles" | wofi -d)
+[ ! -z "$selpassfile" ] && pass show "$selpassfile" | wl-copy

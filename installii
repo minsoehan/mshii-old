@@ -1,0 +1,48 @@
+#!/bin/dash
+
+echo "Installing is just creating symlink as below:"
+echo "/PATH/ii to ./infonotiswitch.sh"
+echo "Where you want to install it to?"
+echo "0) Exit"
+echo "1) user level"
+echo "2) system wide"
+read -p "Select: " sel
+
+case $sel in
+    0)
+        exit 0
+        ;;
+    1)
+        ckp=$(echo $PATH | sed 's/:/\n/g' | grep "/home/")
+        if [ -z "$ckp" ]; then
+            echo "You have no excutable PATH in your home directory."
+            echo "You will neet to set environment variable of PATH."
+        else
+            hdir="$(dirname "$(readlink -f "$0")")"
+            echo "give symlink name or"
+            echo "leave it blank for default name as \"ii\""
+            read -p "type name or leave blank: " nn
+            if [ -z "$nn" ]; then
+                ln -s "$hdir"/masterii "$ckp"/ii
+            else
+                ln -s "$hdir"/masterii "$ckp"/"$nn"
+            fi
+        fi
+        ;;
+    2)
+        echo "It is goining to be installed to /usr/local/bin."
+        echo "You will need to type your password."
+        hdir="$(dirname "$(readlink -f "$0")")"
+        echo "give symlink name or"
+        echo "leave it blank for default name as \"ii\""
+        read -p "type name or leave blank: " nn
+        if [ -z "$nn" ]; then
+            sudo ln -s "$hdir"/masterii /usr/local/bin/ii
+        else
+            sudo ln -s "$hdir"/masterii /usr/local/bin/"$nn"
+        fi
+        ;;
+    *)
+        exit 0
+        ;;
+esac

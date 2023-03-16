@@ -1,0 +1,4 @@
+#!/bin/dash
+
+grim - | wl-copy
+notify-send -t 3000 "Whole Screen Screenshot" "A screenshot of your whole screen has been copied to clipboard."

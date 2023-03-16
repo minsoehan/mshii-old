@@ -1,0 +1,122 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+bdir="$(dirname "$fdir")"
+
+ckfd=$(echo "Dictionary
+Search Folder
+Search File
+Search Both
+Browse" | fuzzel -d) > /dev/null 2>&1
+
+skwhistory () {
+    skw=$(cat "$bdir"/mnlogs/search-history | fuzzel -d) > /dev/null 2>&1
+    [ ! -z "$skw" ] &&
+        (echo "$skw" && cat "$bdir"/mnlogs/search-history) | awk '!_[$0]++' | head -n 7 > "$bdir"/mnlogs/search-history-tmp &&
+        mv "$bdir"/mnlogs/search-history-tmp "$bdir"/mnlogs/search-history
+}
+
+case "$ckfd" in
+    "Dictionary")
+        cd "$bdir/mndicsrc"
+        dicopen=$(ls . | fuzzel -d) > /dev/null 2>&1
+        if [ -f "$dicopen" ]; then
+            xdg-open "$dicopen" &
+        else
+            notify-send -t 900 " " "clean exit\n_"
+        fi
+        exit 0
+        ;;
+    "Search Folder")
+        skwhistory
+        if [ ! -z "$skw" ]; then
+            dopen=$(find ~ -type d -iname "*$skw*" | fuzzel -d) > /dev/null 2>&1
+            if [ -d "$dopen" ]; then
+                cd "$dopen"
+                while true; do
+                    open=$(ls -a --group-directories-first --file-type -- . | grep -v "^\.[a-zA-Z0-9]\|^\./" | fuzzel -d) > /dev/null 2>&1
+                    if [ -d "$open" ]; then
+                        cd "$open"
+                    else
+                        if [ -f "$open" ]; then
+                            xdg-open "$open" &
+                        else
+                            notify-send -t 900 " " "clean exit\n_"
+                        fi
+                        break
+                    fi
+                done
+            else
+                notify-send -t 900 " " "clean exit\n_"
+            fi
+        else
+            notify-send -t 900 " " "clean exit\n_"
+        fi
+        exit 0
+        ;;
+    "Search File")
+        skwhistory
+        if [ ! -z "$skw" ]; then
+            fopen=$(find ~ -type f -iname "*$skw*" | fuzzel -d) > /dev/null 2>&1
+            if [ -f "$fopen" ]; then
+                xdg-open "$fopen" &
+            else
+                notify-send -t 900 " " "clean exit\n_"
+            fi
+        else
+            notify-send -t 900 " " "clean exit\n_"
+        fi
+        exit 0
+        ;;
+    "Search Both")
+        skwhistory
+        if [ ! -z "$skw" ]; then
+            cd ~
+            open=$(find . -iname "*$skw*" | fuzzel -d) > /dev/null 2>&1
+            if [ -d "$open" ]; then
+                cd "$open"
+                while true; do
+                    openn=$(ls -a --group-directories-first --file-type -- . | grep -v "^\.[a-zA-Z0-9]\|^\./" | fuzzel -d) > /dev/null 2>&1
+                    if [ -d "$openn" ]; then
+                        cd "$openn"
+                    else
+                        if [ -f "$openn" ]; then
+                            xdg-open "$openn" &
+                        else
+                            notify-send -t 900 " " "clean exit\n_"
+                        fi
+                        break
+                    fi
+                done
+            else
+                if [ -f "$open" ]; then
+                    xdg-open "$open" &
+                else
+                    notify-send -t 900 " " "clean exit\n_"
+                fi
+            fi
+        else
+            notify-send -t 900 " " "clean exit\n_"
+        fi
+        exit 0
+        ;;
+    "Browse")
+        cd ~
+        while true; do
+            open=$(ls -a --group-directories-first --file-type -- . | grep -v "^\.[a-zA-Z0-9]\|^\./" | fuzzel -d) > /dev/null 2>&1
+            if [ -d "$open" ]; then
+                cd "$open"
+            else
+                if [ -f "$open" ]; then
+                    xdg-open "$open" &
+                else
+                    notify-send -t 900 " " "clean exit\n_"
+                fi
+                break
+            fi
+        done
+        ;;
+    *)
+        exit 0
+        ;;
+esac

@@ -1,0 +1,36 @@
+#!/bin/dash
+
+fdir="$(dirname "$(readlink -f "$0")")"
+bdir="$(dirname "$fdir")"
+
+slaunch () {
+    sorig=$(cat "$bdir"/mnlogs/directopenlist | grep "$sbf" | sed 's/~\///' | head -n 1)
+    if [ -d ~/"$sorig" ]; then
+        cd ~/"$sorig"
+        while true; do
+            open=$(ls -a --group-directories-first --file-type -- . | grep -v "^\.[a-zA-Z0-9]\|^\./" | wofi -d) > /dev/null 2>&1
+            if [ -d "$open" ]; then
+                cd "$open"
+            else
+                if [ ! -z "$open" ]; then
+                    xdg-open "$open" &
+                fi
+                break
+            fi
+        done
+    else
+        if [ ! -z "$sorig" ]; then
+            xdg-open ~/"$sorig" & > /dev/null 2>&1
+        fi
+        exit 0
+    fi
+}
+
+flist () {
+    for i in $(cat "$bdir"/mnlogs/directopenlist); do
+        basename "$i"
+    done
+}
+
+sbf=$(flist | wofi -d) > /dev/null 2>&1
+slaunch
